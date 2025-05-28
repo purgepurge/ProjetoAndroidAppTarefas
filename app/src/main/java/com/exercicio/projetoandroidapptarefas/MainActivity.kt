@@ -108,13 +108,9 @@ class MainActivity : AppCompatActivity() {
 
         // Listener para o novo botão "Ver Tarefas"
         buttonVerTarefas.setOnClickListener {
-            // Cria um Intent para iniciar a ListaTarefasActivity
             val intent = Intent(this, ListaTarefas::class.java)
-            // Passa a lista de tarefas para a ListaTarefasActivity
-            // É necessário converter para ArrayList para passar via Intent.
-            intent.putExtra("lista_de_tarefas", ArrayList(listaDeTarefas))
-            // Inicia a nova Activity
             startActivity(intent)
         }
+
     }
 }

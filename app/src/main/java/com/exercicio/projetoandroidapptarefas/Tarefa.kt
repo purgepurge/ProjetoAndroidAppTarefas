@@ -13,10 +13,11 @@ data class Tarefa(
     var prioridade: Int? = null,   // Prioridade da tarefa (Alta, Média, Baixa)
     var concluida: Boolean = false, // Se a tarefa já foi concluida.
     var dataCriacao: Date? = null, //A data que a tarefa foi criada.
-    var dataConclusao: Date? = null //A data que a tarefa foi concluida
+    var dataConclusao: Date? = null, //A data que a tarefa foi concluida
+    var apagada: Boolean = false //ela inicialmente não está apagada
 )
 {
-    constructor() : this(null,null,null,null,false,null,null)
+    constructor() : this(null,null,null,null,false,null,null,false)
 }
 
 

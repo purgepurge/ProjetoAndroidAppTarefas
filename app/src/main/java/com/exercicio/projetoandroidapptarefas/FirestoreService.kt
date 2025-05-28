@@ -23,6 +23,7 @@ object FirestoreService { // classe que serve para fazer todo o CRUD do banco de
         onFailure: (Exception) -> Unit
     ) {
         tarefasCollection
+            .whereEqualTo("apagada", false)
             .orderBy("dataCriacao", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->

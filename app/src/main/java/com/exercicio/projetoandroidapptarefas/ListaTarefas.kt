@@ -72,19 +72,17 @@ class ListaTarefas : AppCompatActivity() {
 
     private fun exibirDialogoDeletar(tarefa: Tarefa) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-        builder.setTitle("Excluir tarefa")
-        builder.setMessage("Deseja realmente excluir a tarefa \"${tarefa.nome}\"?")
+        builder.setTitle("Arquivar tarefa")
+        builder.setMessage("Deseja realmente Arquivar a tarefa \"${tarefa.nome}\"?")
 
         builder.setPositiveButton("Sim") { _, _ ->
-            tarefa.id?.let { id ->
-                FirestoreService.deletarTarefa(id, {
-                    Toast.makeText(this, "Tarefa excluída com sucesso.", Toast.LENGTH_SHORT).show()
-                    // Atualiza a lista
-                    recreate()
-                }, { e ->
-                    Toast.makeText(this, "Erro ao excluir: ${e.message}", Toast.LENGTH_SHORT).show()
-                })
-            }
+            tarefa.apagada = true
+            FirestoreService.atualizarTarefa(tarefa, {
+                Toast.makeText(this, "Tarefa arquivada com sucesso.", Toast.LENGTH_SHORT).show()
+                recreate()
+            }, { e ->
+                Toast.makeText(this, "Erro ao arquivar: ${e.message}", Toast.LENGTH_SHORT).show()
+            })
         }
 
         builder.setNegativeButton("Não") { dialog, _ ->
