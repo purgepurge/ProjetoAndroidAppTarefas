@@ -44,7 +44,7 @@ class ListaTarefasAdapter(
         }
         holder.prioridadeTarefa.setTextColor(corPrioridade)
 
-        // ✅ Clique no item
+        // ao clicar no item para concluida, deixa ele cinza
         holder.itemView.setOnClickListener {
             onItemClick(tarefa)
         }

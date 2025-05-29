@@ -18,9 +18,17 @@ class ListaTarefas : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewTarefas)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        //Carrega as tarefas
+    }
+
+    override fun onStart() {
+        super.onStart()
+        carregarTarefas()
+    }
+
+    private fun carregarTarefas() {
         FirestoreService.listarTarefas({ tarefas ->
-            adaptadorTarefas = ListaTarefasAdapter(tarefas,
+            adaptadorTarefas = ListaTarefasAdapter(
+                tarefas,
                 onItemClick = { tarefa ->
                     exibirDialogoConclusao(tarefa)
                 },
@@ -30,11 +38,14 @@ class ListaTarefas : AppCompatActivity() {
             )
             recyclerView.adapter = adaptadorTarefas
         }, { e ->
-            Toast.makeText(this, "Erro ao carregar tarefas: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Erro ao carregar tarefas: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
         })
-
     }
-    //Função para marcar tarefa como concluida
+
     private fun exibirDialogoConclusao(tarefa: Tarefa) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Tarefa concluída?")
@@ -45,7 +56,7 @@ class ListaTarefas : AppCompatActivity() {
             tarefa.concluida = true
             tarefa.dataConclusao = dataConclusao
 
-            // Calcula o tempo gasto
+            // Calcula tempo gasto
             val tempoGastoMillis = dataConclusao.time - (tarefa.dataCriacao?.time ?: dataConclusao.time)
             val tempoGastoMinutos = tempoGastoMillis / 60000
 
@@ -55,12 +66,13 @@ class ListaTarefas : AppCompatActivity() {
                     "Tarefa concluída! Tempo gasto: $tempoGastoMinutos minutos.",
                     Toast.LENGTH_LONG
                 ).show()
-
-                // Recarrega a lista
-                recreate()
-
+                carregarTarefas() // 🔥 Atualiza a lista após concluir
             }, { e ->
-                Toast.makeText(this, "Erro ao atualizar: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Erro ao atualizar: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             })
         }
 
@@ -70,19 +82,28 @@ class ListaTarefas : AppCompatActivity() {
 
         builder.show()
     }
-    //Função para arquivar uma tarefa
+
     private fun exibirDialogoDeletar(tarefa: Tarefa) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Arquivar tarefa")
-        builder.setMessage("Deseja realmente Arquivar a tarefa \"${tarefa.nome}\"?")
+        builder.setMessage("Deseja realmente arquivar a tarefa \"${tarefa.nome}\"?")
 
         builder.setPositiveButton("Sim") { _, _ ->
             tarefa.apagada = true
+
             FirestoreService.atualizarTarefa(tarefa, {
-                Toast.makeText(this, "Tarefa arquivada com sucesso.", Toast.LENGTH_SHORT).show()
-                recreate()
+                Toast.makeText(
+                    this,
+                    "Tarefa arquivada com sucesso.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                carregarTarefas() // 🔥 Atualiza a lista após arquivar
             }, { e ->
-                Toast.makeText(this, "Erro ao arquivar: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Erro ao arquivar: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             })
         }
 
@@ -92,6 +113,4 @@ class ListaTarefas : AppCompatActivity() {
 
         builder.show()
     }
-
-
 }

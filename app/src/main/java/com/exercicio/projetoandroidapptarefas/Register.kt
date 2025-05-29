@@ -23,7 +23,7 @@ class RegisterActivity : AppCompatActivity() {
 
         buttonRegistrar.setOnClickListener {
             val email = editEmail.text.toString()
-            val senha = editSenha.text.toString()
+            val senha = editSenha.text.toString() // precisa de 6 caracteres
 
             if (email.isNotEmpty() && senha.isNotEmpty()) {
                 auth.createUserWithEmailAndPassword(email, senha)
