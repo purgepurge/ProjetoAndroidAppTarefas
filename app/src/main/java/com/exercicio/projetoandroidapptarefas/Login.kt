@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
             val senha = editSenha.text.toString()
 
             if (email.isNotEmpty() && senha.isNotEmpty()) {
-                auth.signInWithEmailAndPassword(email, senha)
+                auth.signInWithEmailAndPassword(email, senha) //metodo do Firebase Authenticator, para fazer login comparando email e senha digitado com o banco de dados
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Login realizado!", Toast.LENGTH_SHORT).show()
