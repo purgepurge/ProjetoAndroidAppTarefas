@@ -18,7 +18,7 @@ class ListaTarefas : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewTarefas)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
+        //Carrega as tarefas
         FirestoreService.listarTarefas({ tarefas ->
             adaptadorTarefas = ListaTarefasAdapter(tarefas,
                 onItemClick = { tarefa ->
@@ -34,6 +34,7 @@ class ListaTarefas : AppCompatActivity() {
         })
 
     }
+    //Função para marcar tarefa como concluida
     private fun exibirDialogoConclusao(tarefa: Tarefa) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Tarefa concluída?")
@@ -55,7 +56,7 @@ class ListaTarefas : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
 
-                // Recarrega a lista (opcional, pode fazer um refresh aqui)
+                // Recarrega a lista
                 recreate()
 
             }, { e ->
@@ -69,7 +70,7 @@ class ListaTarefas : AppCompatActivity() {
 
         builder.show()
     }
-
+    //Função para arquivar uma tarefa
     private fun exibirDialogoDeletar(tarefa: Tarefa) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Arquivar tarefa")

@@ -1,13 +1,17 @@
 package com.exercicio.projetoandroidapptarefas
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.util.*
 
 object FirestoreService { // classe que serve para fazer todo o CRUD do banco de dados
 
-    private val db = FirebaseFirestore.getInstance()
-    private val tarefasCollection = db.collection("tarefas")
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid  //Inicia uma instancia do banco de dados, pegando a UID (Unique Identification) do usuario
+    private val tarefasCollection = FirebaseFirestore.getInstance() //Vincula a tabela Tarefas.
+        .collection("usuarios")
+        .document(userId!!)
+        .collection("tarefas")
 
     // Adiciona uma tarefa
     fun adicionarTarefa(tarefa: Tarefa, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {

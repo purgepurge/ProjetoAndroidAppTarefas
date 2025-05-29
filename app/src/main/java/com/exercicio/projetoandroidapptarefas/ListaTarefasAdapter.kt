@@ -23,7 +23,7 @@ class ListaTarefasAdapter(
             .inflate(R.layout.activity_item_tarefa, parent, false) // Certifica que está inflando o xml certo
         return TarefaViewHolder(view)
     }
-
+    //Preenche as views do recycle view
     override fun onBindViewHolder(holder: TarefaViewHolder, position: Int) {
         val tarefa = tarefas[position]
 

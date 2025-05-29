@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
 import java.util.Date
 
 
@@ -23,45 +24,40 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonSalvarTarefa: Button
     private lateinit var varbuttonCancelar: Button
     private lateinit var buttonVerTarefas: Button // Novo botão para ver as tarefas
-    //private lateinit var binding:
-
-
-    // Lista mutável para armazenar as tarefas.
-    // NOTA: Esta lista é temporária e não persiste após o aplicativo ser fechado.
-    // Para persistência real, você precisaria de um banco de dados (SQLite, Room, Firebase, etc.).
-    private val listaDeTarefas = mutableListOf<Tarefa>()
+    private lateinit var buttonSair: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
 
         // Habilita o modo "edge-to-edge" para que o conteúdo se estenda por toda a tela,
         // incluindo as áreas das barras de sistema (status bar e navigation bar).
         enableEdgeToEdge()
 
         // Define o layout XML para esta Activity.
-        // R.layout.activity_main refere-se ao arquivo activity_main.xml na pasta res/layout.
         setContentView(R.layout.activity_main)
 
         // Configura um listener para aplicar insets (espaçamentos) para as barras do sistema.
         // Isso garante que o conteúdo não seja sobreposto pelas barras de status e navegação.
-        // É importante que o ConstraintLayout raiz no seu XML tenha o ID "main" para isso funcionar.
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-
-        // --- Inicialização dos elementos da UI ---
-        // Conecta as variáveis Kotlin aos elementos visuais definidos no XML usando seus IDs.
+        // Conectar elementos visuais definidos no XML usando seus IDs.
         editTextNomeTarefa = findViewById(R.id.editTextNomeTarefa)
         editTextDescricao = findViewById(R.id.editTextDescricao)
         radioGroupPrioridade = findViewById(R.id.radioGroupPrioridade)
         buttonSalvarTarefa = findViewById(R.id.buttonSalvarTarefa)
         varbuttonCancelar = findViewById(R.id.buttonCancelar)
         buttonVerTarefas = findViewById(R.id.buttonVerTarefas) // Inicializa o novo botão
-
-        // --- Configuração dos Listeners de Clique para os Botões ---
+        buttonSair = findViewById(R.id.buttonSair)
 
         // Listener para o botão "Salvar Tarefa"
         buttonSalvarTarefa.setOnClickListener {
@@ -96,7 +92,12 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Digite o nome da tarefa", Toast.LENGTH_SHORT).show()
             }
         }
-
+        //Botão para deslogar o usuario
+        buttonSair.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
 
         // Listener para o botão "Cancelar"
         varbuttonCancelar.setOnClickListener {
@@ -111,6 +112,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ListaTarefas::class.java)
             startActivity(intent)
         }
-
     }
 }
